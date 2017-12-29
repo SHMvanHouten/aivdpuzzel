@@ -27,9 +27,9 @@ class CharRemover {
         val emptyColumns = 0.until(21).filter { x ->
             gridWithout.keys.none { it.x == x }
         }
-        emptyColumns.forEach { x ->
+        emptyColumns.reversed().forEach { x ->
             gridWithout = gridWithout.entries.associateBy({
-                if (it.key.x < x) {
+                if (it.key.x > x) {
                     Coordinate(it.key.x - 1, it.key.y)
                 } else {
                     it.key

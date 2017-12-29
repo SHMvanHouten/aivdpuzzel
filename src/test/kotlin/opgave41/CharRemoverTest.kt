@@ -40,23 +40,15 @@ class CharRemoverTest {
     fun `Martijn's input`() {
         val messageFinder = CharRemover()
 
-        var gridWithoutChar = messageFinder.removeChar(Coordinate(0, 7), grid)
-        drawGrid(gridWithoutChar)
-        gridWithoutChar = messageFinder.removeChar(Coordinate(7, 20), gridWithoutChar)
-        drawGrid(gridWithoutChar)
 
-        gridWithoutChar = messageFinder.removeChar(Coordinate(0, 13), gridWithoutChar)
-        drawGrid(gridWithoutChar)
+        var gridWithoutChar = grid
 
-        gridWithoutChar = messageFinder.removeChar(Coordinate(0, 12), gridWithoutChar)
-        drawGrid(gridWithoutChar)
 
-        gridWithoutChar = messageFinder.removeChar(Coordinate(19, 2), gridWithoutChar)
-        drawGrid(gridWithoutChar)
-
-        gridWithoutChar = messageFinder.removeChar(Coordinate(20, 6), gridWithoutChar)
-        drawGrid(gridWithoutChar)
-
+        coordinates.forEach { coordinate ->
+            println("removing ${gridWithoutChar.getValue(coordinate)} at coordinate: $coordinate")
+            gridWithoutChar = messageFinder.removeChar(coordinate, gridWithoutChar)
+            drawGrid(gridWithoutChar)
+        }
         assertThat(gridWithoutChar.values.any { it == 'k' }, equalTo(false))
     }
 
@@ -68,3 +60,33 @@ class CharRemoverTest {
     }
 }
 
+val coordinates = listOf(Coordinate(x = 0, y = 7),
+        Coordinate(x = 7, y = 15),
+        Coordinate(x = 2, y = 10),
+        Coordinate(x = 2, y = 9),
+        Coordinate(x = 15, y = 2),
+        Coordinate(x = 15, y = 6),
+        Coordinate(x = 20, y = 16),
+        Coordinate(x = 11, y = 2),
+        Coordinate(x = 7, y = 15),
+        Coordinate(x = 7, y = 15),
+        Coordinate(x = 8, y = 18),
+        Coordinate(x = 11, y = 17),
+        Coordinate(x = 1, y = 10),
+        Coordinate(x = 5, y = 9),
+        Coordinate(x = 2, y = 9),
+        Coordinate(x = 7, y = 11),
+        Coordinate(x = 7, y = 17),
+        Coordinate(x = 18, y = 15),
+        Coordinate(x = 8, y = 12),
+        Coordinate(x = 11, y = 11),
+        Coordinate(x = 14, y = 15),
+        Coordinate(x = 7, y = 19),
+        Coordinate(x = 0, y = 17),
+        Coordinate(x = 11, y = 13),
+        Coordinate(x = 6, y = 19),
+        Coordinate(x = 2, y = 16),
+        Coordinate(x = 0, y = 16),
+        Coordinate(x = 3, y = 17),
+        Coordinate(x = 0, y = 14)
+)

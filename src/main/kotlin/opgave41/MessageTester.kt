@@ -7,7 +7,6 @@ class MessageTester(private val charRemover: CharRemover = CharRemover()) {
         var unfinishedPaths = listOf(Node(grid, emptyList()))
 
         solution.forEachIndexed { index, currentChar ->
-            println("$currentChar with ${unfinishedPaths.size}")
             if (currentCharIsTheLastInTheSolution(index, solution)) {
                 unfinishedPaths = unfinishedPaths.filter { isCharInSingleCluster(currentChar, it.grid) }
             }
@@ -15,8 +14,11 @@ class MessageTester(private val charRemover: CharRemover = CharRemover()) {
                 val validCoordinates = getValidCoordinates(currentChar, node.grid)
                 validCoordinates.map { Node(charRemover.removeChar(it, node.grid), node.path.plus(it)) }
             }
+            println("removing a $currentChar gave ${unfinishedPaths.size} possible grid layouts")
         }
 
+        val first = unfinishedPaths.first()
+        first.path.forEach { println(it) }
         return unfinishedPaths.any { it.grid.isEmpty() }
     }
 
