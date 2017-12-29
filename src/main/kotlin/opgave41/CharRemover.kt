@@ -11,7 +11,7 @@ class CharRemover {
     }
 
     fun removeChar(coordinateToRemove: Coordinate, grid: Map<Coordinate, Char>): Map<Coordinate, Char> {
-        val removedCoordinates = getCharsThatAreNotAlone(coordinateToRemove, grid)
+        val removedCoordinates = getAttachedChars(coordinateToRemove, grid)
         var gridWithout = grid - removedCoordinates
 
         removedCoordinates.sortedBy { it.y }.forEach { removedCoordinate ->
@@ -40,7 +40,7 @@ class CharRemover {
         return gridWithout
     }
 
-    private fun getCharsThatAreNotAlone(charLocation: Coordinate, grid: Map<Coordinate, Char>): Set<Coordinate> {
+    fun getAttachedChars(charLocation: Coordinate, grid: Map<Coordinate, Char>): Set<Coordinate> {
         val charAtLocation = grid.getValue(charLocation)
 //        println("removing $charAtLocation")
 
