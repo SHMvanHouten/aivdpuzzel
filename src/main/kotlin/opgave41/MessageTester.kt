@@ -1,43 +1,23 @@
 package opgave41
 
 class MessageTester(private val charRemover: CharRemover = CharRemover()) {
+
     fun test(solution: String, grid: Map<Coordinate, Char>): Boolean {
 
-        val index = 0
-        val solutionGrids = playAwayGridWithSolution(index, solution, grid)
-        return solutionGrids != null
-    }
+        var unfinishedPaths = listOf(Node(grid, emptyList()))
 
-    private fun playAwayGridWithSolution(index: Int, solution: String, grid: Map<Coordinate, Char>): Map<Coordinate, Char>? {
-        if(index > solution.length ){
-            println(grid.size)
-        }
-        if (index == solution.length && grid.isEmpty()) {
-            println("found a solution")
-            return grid
-        }
-        val currentChar = solution[index]
-
-        if(currentCharIsTheLastInTheSolution(index, solution) && !isCharInSingleCluster(currentChar, grid)){
-//            println("$currentChar at $index is the last but will not be eliminated")
-//            drawGrid(grid)
-            return null
+        solution.forEachIndexed { index, currentChar ->
+            println("$currentChar with ${unfinishedPaths.size}")
+            if (currentCharIsTheLastInTheSolution(index, solution)) {
+                unfinishedPaths = unfinishedPaths.filter { isCharInSingleCluster(currentChar, it.grid) }
+            }
+            unfinishedPaths = unfinishedPaths.flatMap { node ->
+                val validCoordinates = getValidCoordinates(currentChar, node.grid)
+                validCoordinates.map { Node(charRemover.removeChar(it, node.grid), node.path.plus(it)) }
+            }
         }
 
-        if(index > 16){
-            println("we got past the dreaded 16!")
-        }
-
-        val gridsThatWork = getValidCoordinates(currentChar, grid).mapNotNull {
-            val gridWithoutChar = charRemover.removeChar(it, grid)
-            playAwayGridWithSolution(index + 1, solution, gridWithoutChar)
-        }
-
-        return if(gridsThatWork.isNotEmpty()){
-            gridsThatWork.first()
-        } else {
-            null
-        }
+        return unfinishedPaths.any { it.grid.isEmpty() }
     }
 
     private fun isCharInSingleCluster(currentChar: Char, grid: Map<Coordinate, Char>): Boolean {
@@ -58,18 +38,28 @@ class MessageTester(private val charRemover: CharRemover = CharRemover()) {
     }
 
     private fun getSingleCoordinatesFromGroups(groupedCharacters: List<Coordinate>): Set<Coordinate> {
-        var groupLeaders = setOf<Coordinate>()
-        var groupMembers = setOf<Coordinate>()
+        val groupLeaders = mutableMapOf<Coordinate, Set<Coordinate>>()
 
         groupedCharacters.forEach { coordinateOfCharacter ->
-            if (coordinateOfCharacter.getNeighbours().none { groupMembers.contains(it) }) {
-                groupLeaders += coordinateOfCharacter
+            val groupsThatFit = groupLeaders.filter { group ->
+                group.value.any { coordinate ->
+                    coordinateOfCharacter.getNeighbours().any { it == coordinate }
+                }
+            }
+            when {
+                groupsThatFit.isEmpty() -> groupLeaders.put(coordinateOfCharacter, setOf(coordinateOfCharacter))
+
+                groupsThatFit.size == 1 -> groupLeaders.put(groupsThatFit.keys.first(), groupsThatFit.values.first() + coordinateOfCharacter)
+
+                else -> {
+                    groupsThatFit.keys.forEach { groupLeaders.remove(it) }
+                    groupLeaders.put(groupsThatFit.keys.first(), groupsThatFit.values.flatMap { it }.toSet())
+                }
             }
 
-            groupMembers += coordinateOfCharacter
         }
 
-        return groupLeaders
+        return groupLeaders.keys
     }
 
     private fun isItAlone(coordinate: Coordinate, currentCharactersInGrid: Set<Coordinate>): Boolean {

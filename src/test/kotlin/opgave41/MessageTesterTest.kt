@@ -14,7 +14,6 @@ class MessageTesterTest {
     @Test
     fun `it should work through the possible solution`() {
         val solution = "FiJnEkErStEnEeNgOeDnIeUwJaAr!"
-        val charRemover = CharRemover()
 
         val messageTester = MessageTester()
         assertThat(messageTester.test(solution, grid), equalTo(true))
