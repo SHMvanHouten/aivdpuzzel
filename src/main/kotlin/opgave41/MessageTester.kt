@@ -13,7 +13,7 @@ class MessageTester(private val charRemover: CharRemover = CharRemover()) {
             unfinishedPaths = unfinishedPaths.flatMap { node ->
                 val validCoordinates = getValidCoordinates(currentChar, node.grid)
                 validCoordinates.map { Node(charRemover.removeChar(it, node.grid), node.path.plus(it)) }
-            }
+            }.distinctBy { it.grid }
             println("removing a $currentChar gave ${unfinishedPaths.size} possible grid layouts")
         }
 
