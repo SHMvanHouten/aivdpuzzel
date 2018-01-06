@@ -1,0 +1,4 @@
+package adfgvx
+
+class SquareBuilder {
+}
