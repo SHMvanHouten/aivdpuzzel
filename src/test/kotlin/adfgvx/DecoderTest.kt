@@ -9,10 +9,12 @@ import org.junit.Test
 class DecoderTest {
 
     private lateinit var decoder: Decoder
+    private lateinit var squareBuilder: SquareBuilder
 
     @Before
     fun setUp() {
         decoder = Decoder()
+        squareBuilder = SquareBuilder()
     }
 
     @Test
@@ -55,7 +57,7 @@ E 5 W R P D
 4 F 6 G 7 I
 9 J 0 K L Q
 S U V X Y Z"""
-        val parsedSquare = parseSquare(square)
+        val parsedSquare = squareBuilder.parseSquare(square)
         printSquare(parsedSquare)
 
         val decodedMessage = decoder.decodeTransposedMessage(transposedMessage, parsedSquare)
@@ -70,7 +72,7 @@ E 5 W R P D
 4 F 6 G 7 I
 9 J 0 K L Q
 S U V X Y Z"""
-        val parsedSquare = parseSquare(square)
+        val parsedSquare = squareBuilder.parseSquare(square)
         val encrypted = "DFGGX XAAXG AFXGA FXXXG FFXFA DDXGA".removeAllChars(' ')
         val key = "PILOTEN"
 
@@ -79,10 +81,10 @@ S U V X Y Z"""
     }
 
     private fun printSquare(parsedSquare: Map<SquareCoordinate, Char>) {
-        0.until(6).forEach { y ->
+        ADFGVX.forEach { y ->
             println(StringBuilder().apply {
-                0.until(6).forEach { x ->
-                    append(parsedSquare.getValue(SquareCoordinate(ADFGVX[x], ADFGVX[y])))
+                ADFGVX.forEach { x ->
+                    append(parsedSquare.getValue(SquareCoordinate(x, y)))
                 }
             })
         }
