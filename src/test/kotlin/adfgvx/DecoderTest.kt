@@ -49,7 +49,7 @@ class DecoderTest {
         val parsedSquare = squareBuilder.build("NACHTBOMMENWERPER")
         printSquare(parsedSquare)
 
-        val decodedMessage = decoder.decodeTransposedMessage(transposedMessage, parsedSquare)
+        val decodedMessage = decoder.decodeDeTransposedMessage(transposedMessage, parsedSquare)
         assertThat(decodedMessage, equalTo("ditiszeergeheim".toUpperCase()))
     }
 

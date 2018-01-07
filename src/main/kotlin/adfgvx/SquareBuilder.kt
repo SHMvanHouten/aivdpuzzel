@@ -37,7 +37,7 @@ class SquareBuilder {
                                 SquareCoordinate(ADFGVX[y], ADFGVX[x]) to char
                             }
                 }
-                .flatMap { it }
+                .flatten()
                 .toMap()
     }
 

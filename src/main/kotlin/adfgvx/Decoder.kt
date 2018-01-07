@@ -4,14 +4,14 @@ import solutions.Solutions.Task31.codedMessage
 import solutions.Solutions.Task31.firstKey
 import solutions.Solutions.Task31.secondKey
 
-val ADFGVX = "ADFGVX".toList()
+const val ADFGVX = "ADFGVX"
 
 class Decoder(private val squareBuilder: SquareBuilder = SquareBuilder()) {
 
     fun decodeMessage(encrypted: String, firstKey: String, secondKey: String): String {
         val deTransposedMessage = deTransposeMessage(encrypted, firstKey)
         val parsedSquare = squareBuilder.build(secondKey)
-        return decodeTransposedMessage(deTransposedMessage, parsedSquare)
+        return decodeDeTransposedMessage(deTransposedMessage, parsedSquare)
     }
 
     fun deTransposeMessage(codedMessage: String, key: String): String {
@@ -19,25 +19,25 @@ class Decoder(private val squareBuilder: SquareBuilder = SquareBuilder()) {
         val columnSize = codedMessage.length / key.length
         var remainingCodedMessage = codedMessage
 
-        val columns = key.mapIndexed { index, char -> index to char }
-                .sortedBy { it.second }
-                .map { indexToChar ->
-                    var tempColumnSize = columnSize
-                    if (indexToChar.first < remainder) {
-                        tempColumnSize++
-                    }
+        val columns = key.mapIndexed { index, char -> PositionedChar(char, index) }
+                .sortedBy { it.char }
+                .map { positionedChar ->
+                    val index = positionedChar.index
+                    val tempColumnSize = assessColumnSize(columnSize, index, remainder)
                     val (column, remainingCode) = remainingCodedMessage.splitIntoTwo(tempColumnSize)
                     remainingCodedMessage = remainingCode
-                    indexToChar.first to column.toList()
-                }.sortedBy { it.first }
-                .map { it.second }
+                    PositionedColumn(column.toList(), index)
+                }.sortedBy { it.index }
+                .map { it.column }
         printColumns(key, columns)
         return stringifyColumns(columns)
     }
 
-    fun decodeTransposedMessage(transposedMessage: String, parsedSquare: Map<SquareCoordinate, Char>): String {
-        val messagePair = transposedMessage.splitIntoPairs()
-        return messagePair.map { parsedSquare.getValue(SquareCoordinate(it[0], it[1])) }.joinToString("")
+    fun decodeDeTransposedMessage(transposedMessage: String, parsedSquare: Map<SquareCoordinate, Char>): String {
+        val messagePairs = transposedMessage.splitIntoPairs()
+        return messagePairs
+                .map { parsedSquare.getValue(SquareCoordinate(it.first, it.second)) }
+                .joinToString("")
     }
 
     private fun stringifyColumns(columns: List<List<Char>>): String {
@@ -51,12 +51,24 @@ class Decoder(private val squareBuilder: SquareBuilder = SquareBuilder()) {
             }
         }.toString()
     }
+
+    private fun assessColumnSize(columnSize: Int, index: Int, remainder: Int): Int {
+        var tempColumnSize = columnSize
+        if (index < remainder) {
+            tempColumnSize++
+        }
+        return tempColumnSize
+    }
 }
 
-private fun String.splitIntoPairs(): List<String> {
+data class PositionedColumn(val column: List<Char>, val index: Int)
+
+data class PositionedChar(val char: Char, val index: Int)
+
+private fun String.splitIntoPairs(): List<Pair<Char, Char>> {
 
     return 0.until(this.length).step(2).map { index ->
-        this.substring(index, index + 2)
+        Pair(this[index], this[index + 1])
     }
 }
 
