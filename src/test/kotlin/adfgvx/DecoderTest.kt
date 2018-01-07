@@ -57,7 +57,7 @@ E 5 W R P D
 4 F 6 G 7 I
 9 J 0 K L Q
 S U V X Y Z"""
-        val parsedSquare = squareBuilder.parseSquare(square)
+        val parsedSquare = squareBuilder.parseSquare("")
         printSquare(parsedSquare)
 
         val decodedMessage = decoder.decodeTransposedMessage(transposedMessage, parsedSquare)

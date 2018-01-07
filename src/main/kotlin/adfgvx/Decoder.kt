@@ -1,5 +1,9 @@
 package adfgvx
 
+import solutions.Solutions.Task31.codedMessage
+import solutions.Solutions.Task31.firstKey
+import solutions.Solutions.Task31.secondKey
+
 val ADFGVX = "ADFGVX".toList()
 
 class Decoder(private val squareBuilder: SquareBuilder = SquareBuilder()) {
@@ -93,24 +97,9 @@ data class SquareCoordinate(val x: Char, val y: Char)
 
 
 fun main(args: Array<String>) {
-    val squareBuilder = SquareBuilder()
 
-    val codedMessage = "VAADGFAGAAXXDAAAFFXAAAVDXAGGXAAAADGAXVGAFFAVXVAVADVADVAAVA"
-    val firstKey = "NeeditisnietdeoplossingAB"
-    val secondKey = "GEORGESPAINVIN"
-    val square = """N E 5 D 4 I
-9 T S O P L
-G 7 A 1 B 2
-C 3 F 6 H 8
-J 0 K M Q R
-U V W X Y Z"""
-    val parsedSquare = squareBuilder.parseSquare(square)
+
     val decoder = Decoder()
-    println(decoder.decodeMessage(codedMessage, parsedSquare, secondKey))
-    val secondCodedMessage = "Fddgfxdfddaagdddxxadddvxadffaddddgfdavfdxxdvavdvdgvdgfddvd".toUpperCase()
-//    println(decoder.decodeMessage(secondCodedMessage, parsedSquare, secondKey))
-//    println(decoder.decodeMessage(secondCodedMessage, secondKey, firstKey))
-//    println(decoder.decodeMessage(codedMessage, secondKey, firstKey))
-//    println(decoder.decodeMessage(codedMessage, firstKey, secondKey))
-    println(decoder.decodeMessage(secondCodedMessage, "PAINVIN", "GEORGES"))
+
+    println(decoder.decodeMessage(codedMessage, firstKey, secondKey))
 }

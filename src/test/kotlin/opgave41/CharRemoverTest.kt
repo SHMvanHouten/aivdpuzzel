@@ -4,6 +4,7 @@ import com.github.shmvanhouten.adventofcode2017.util.rawinstructionconverter.Raw
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.Test
+import solutions.Solutions.Task41.coordinates
 
 class CharRemoverTest {
 
@@ -60,33 +61,3 @@ class CharRemoverTest {
     }
 }
 
-val coordinates = listOf(Coordinate(x = 0, y = 7),
-        Coordinate(x = 7, y = 15),
-        Coordinate(x = 2, y = 10),
-        Coordinate(x = 2, y = 9),
-        Coordinate(x = 15, y = 2),
-        Coordinate(x = 15, y = 6),
-        Coordinate(x = 20, y = 16),
-        Coordinate(x = 11, y = 2),
-        Coordinate(x = 7, y = 15),
-        Coordinate(x = 7, y = 15),
-        Coordinate(x = 8, y = 18),
-        Coordinate(x = 11, y = 17),
-        Coordinate(x = 1, y = 10),
-        Coordinate(x = 5, y = 9),
-        Coordinate(x = 2, y = 9),
-        Coordinate(x = 7, y = 11),
-        Coordinate(x = 7, y = 17),
-        Coordinate(x = 18, y = 15),
-        Coordinate(x = 8, y = 12),
-        Coordinate(x = 11, y = 11),
-        Coordinate(x = 14, y = 15),
-        Coordinate(x = 7, y = 19),
-        Coordinate(x = 0, y = 17),
-        Coordinate(x = 11, y = 13),
-        Coordinate(x = 6, y = 19),
-        Coordinate(x = 2, y = 16),
-        Coordinate(x = 0, y = 16),
-        Coordinate(x = 3, y = 17),
-        Coordinate(x = 0, y = 14)
-)

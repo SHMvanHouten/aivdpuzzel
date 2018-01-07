@@ -4,6 +4,7 @@ import com.github.shmvanhouten.adventofcode2017.util.rawinstructionconverter.Raw
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.Test
+import solutions.Solutions.Task41.solution
 
 class MessageTesterTest {
 
@@ -13,7 +14,7 @@ class MessageTesterTest {
             .toMap()
     @Test
     fun `it should work through the possible solution`() {
-        val solution = "FiJnEkErStEnEeNgOeDnIeUwJaAr!"
+
 
         val messageTester = MessageTester()
         assertThat(messageTester.test(solution, grid), equalTo(true))
