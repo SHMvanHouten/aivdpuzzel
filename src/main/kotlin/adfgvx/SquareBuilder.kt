@@ -23,12 +23,6 @@ class SquareBuilder {
         return parseSquare(splitIntoSix(rearrangedChars))
     }
 
-    fun parseSquare(square: String): Map<SquareCoordinate, Char> {
-
-        val split = square.split('\n')
-        return parseSquare(split)
-    }
-
     private fun splitIntoSix(rearrangedChars: String): List<String> {
         return 0.until(36).step(6).map { index ->
             rearrangedChars.substring(index, index + 6)

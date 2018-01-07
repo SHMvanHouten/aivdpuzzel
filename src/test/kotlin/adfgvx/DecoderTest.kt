@@ -23,14 +23,10 @@ class DecoderTest {
         val codedMessage = "VAXDGF"
         val key = "BAD"
 
-        val A = listOf('V', 'A')
-        val B = listOf('X', 'D')
-        val D = listOf('G', 'F')
-
-        val expectedList = listOf(B, A, D)
+        val expected = "XVGDAF"
 
 
-        assertThat(decoder.deTransposeMessage(codedMessage, key), equalTo(expectedList))
+        assertThat(decoder.deTransposeMessage(codedMessage, key), equalTo(expected))
     }
 
     @Test
@@ -39,25 +35,18 @@ class DecoderTest {
         val codedMessage = "VAXDGFA"
         val key = "BAD"
 
-        val A = listOf('V', 'A')
-        val B = listOf('X', 'D', 'G')
-        val D = listOf('F', 'A')
 
-        val expectedList = listOf(B, A, D)
+        val expected = "XVFDAAG"
 
-        assertThat(decoder.deTransposeMessage(codedMessage, key), equalTo(expectedList))
+
+        assertThat(decoder.deTransposeMessage(codedMessage, key), equalTo(expected))
     }
 
     @Test
     fun `it should extract the message from the code and square`() {
         val transposedMessage = "FXGXDDGXXAXXFAFAFGGGFAAXFAGXDX"
-        val square = """N A 1 C 3 H
-8 T B 2 O M
-E 5 W R P D
-4 F 6 G 7 I
-9 J 0 K L Q
-S U V X Y Z"""
-        val parsedSquare = squareBuilder.parseSquare("")
+
+        val parsedSquare = squareBuilder.build("NACHTBOMMENWERPER")
         printSquare(parsedSquare)
 
         val decodedMessage = decoder.decodeTransposedMessage(transposedMessage, parsedSquare)
@@ -66,17 +55,12 @@ S U V X Y Z"""
 
     @Test
     fun `it should decode the message`() {
-        val square = """N A 1 C 3 H
-8 T B 2 O M
-E 5 W R P D
-4 F 6 G 7 I
-9 J 0 K L Q
-S U V X Y Z"""
-        val parsedSquare = squareBuilder.parseSquare(square)
-        val encrypted = "DFGGX XAAXG AFXGA FXXXG FFXFA DDXGA".removeAllChars(' ')
-        val key = "PILOTEN"
 
-        val decoded = decoder.decodeMessage(encrypted, parsedSquare, key).toLowerCase()
+        val encrypted = "DFGGX XAAXG AFXGA FXXXG FFXFA DDXGA".removeAllChars(' ')
+        val firstKey = "PILOTEN"
+        val secondKey = "NACHTBOMMENWERPER"
+
+        val decoded = decoder.decodeMessage(encrypted, firstKey, secondKey).toLowerCase()
         assertThat(decoded, equalTo("ditiszeergeheim"))
     }
 

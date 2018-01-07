@@ -8,12 +8,18 @@ val ADFGVX = "ADFGVX".toList()
 
 class Decoder(private val squareBuilder: SquareBuilder = SquareBuilder()) {
 
-    fun deTransposeMessage(codedMessage: String, key: String): List<List<Char>> {
+    fun decodeMessage(encrypted: String, firstKey: String, secondKey: String): String {
+        val deTransposedMessage = deTransposeMessage(encrypted, firstKey)
+        val parsedSquare = squareBuilder.build(secondKey)
+        return decodeTransposedMessage(deTransposedMessage, parsedSquare)
+    }
+
+    fun deTransposeMessage(codedMessage: String, key: String): String {
         val remainder = codedMessage.length % key.length
         val columnSize = codedMessage.length / key.length
         var remainingCodedMessage = codedMessage
 
-        return key.mapIndexed { index, char -> index to char }
+        val columns = key.mapIndexed { index, char -> index to char }
                 .sortedBy { it.second }
                 .map { indexToChar ->
                     var tempColumnSize = columnSize
@@ -25,26 +31,13 @@ class Decoder(private val squareBuilder: SquareBuilder = SquareBuilder()) {
                     indexToChar.first to column.toList()
                 }.sortedBy { it.first }
                 .map { it.second }
+        printColumns(key, columns)
+        return stringifyColumns(columns)
     }
 
     fun decodeTransposedMessage(transposedMessage: String, parsedSquare: Map<SquareCoordinate, Char>): String {
         val messagePair = transposedMessage.splitIntoPairs()
         return messagePair.map { parsedSquare.getValue(SquareCoordinate(it[0], it[1])) }.joinToString("")
-    }
-
-    fun decodeMessage(encrypted: String, parsedSquare: Map<SquareCoordinate, Char>, key: String): String {
-        val columns = deTransposeMessage(encrypted, key)
-        printColumns(key, columns)
-        val deTransposedMessage = stringifyColumns(columns)
-        return decodeTransposedMessage(deTransposedMessage, parsedSquare)
-    }
-
-    fun decodeMessage(encrypted: String, firstKey: String, secondKey: String): String {
-        val columns = deTransposeMessage(encrypted, firstKey)
-        printColumns(firstKey, columns)
-        val deTransposedMessage = stringifyColumns(columns)
-        val parsedSquare = squareBuilder.build(secondKey)
-        return decodeTransposedMessage(deTransposedMessage, parsedSquare)
     }
 
     private fun stringifyColumns(columns: List<List<Char>>): String {
@@ -58,8 +51,6 @@ class Decoder(private val squareBuilder: SquareBuilder = SquareBuilder()) {
             }
         }.toString()
     }
-
-
 }
 
 private fun String.splitIntoPairs(): List<String> {
